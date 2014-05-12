@@ -1,7 +1,6 @@
-FROM ubuntu
- 
-RUN apt-get update
+FROM ubuntu:latest
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
 #Runit
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y runit 
 CMD /usr/sbin/runsvdir-start
@@ -14,9 +13,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-server &&	mkdir -p
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y vim less net-tools inetutils-ping curl git telnet nmap socat dnsutils netcat tree htop unzip sudo
 
 #Salt Repo
-RUN echo 'deb http://ppa.launchpad.net/saltstack/salt/ubuntu precise main' > /etc/apt/sources.list.d/saltstack.list && \
-    wget -q -O- "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x4759FA960E27C0A6" | apt-key add - && \
-    apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
+RUN DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:saltstack/salt
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
 
 #Salt
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y salt-master salt-minion salt-syndic salt-ssh
